@@ -157,7 +157,7 @@ skilldex-web/
 ### 3. Installation Page
 
 - **Platform Tabs** — macOS, Linux, Windows installation methods
-- **Multiple Package Managers** — npm, Homebrew (via `brew tap pandemonium-research/skilldex`), winget, Scoop
+- **Multiple Package Managers** — npm (all platforms), Homebrew (via `brew tap pandemonium-research/skilldex`, macOS/Linux), Scoop (via `scoop bucket add skilldex`, Windows)
 - **Clear Instructions** — Step-by-step setup guides
 
 ### 4. UI Components
@@ -300,8 +300,9 @@ Skills declare which Skilldex specification version they conform to, ensuring fo
 ## 🔗 Related Repositories
 
 - **[CLI Tool](https://github.com/Pandemonium-Research/Skilldex)** — The `skillpm` command-line interface (`npm install -g skilldex-cli`)
-- **[Homebrew Tap](https://github.com/Pandemonium-Research/homebrew-skilldex)** — `brew tap pandemonium-research/skilldex && brew install skilldex-cli`
-- **[npm Package](https://www.npmjs.com/package/skilldex-cli)** — Published package on npm
+- **[Homebrew Tap](https://github.com/Pandemonium-Research/homebrew-skilldex)** — `brew tap pandemonium-research/skilldex && brew install skilldex-cli` (macOS/Linux)
+- **[Scoop Bucket](https://github.com/Pandemonium-Research/scoop-skilldex)** — `scoop bucket add skilldex https://github.com/Pandemonium-Research/scoop-skilldex && scoop install skilldex-cli` (Windows)
+- **[npm Package](https://www.npmjs.com/package/skilldex-cli)** — Published package on npm (all platforms)
 - **Registry Backend** — The skill registry API and storage (coming soon)
 
 ## 🤝 Contributing
@@ -320,4 +321,4 @@ MIT License — Skilldex is open source and free to use.
 
 ---
 
-**Learn more:** Visit [skilldex.dev](https://skilldex.dev) or read the full documentation for detailed guides and API reference.
+**Learn more:** Visit [skilldex-web.vercel.app](https://skilldex-web.vercel.app) or read the full documentation for detailed guides and API reference.

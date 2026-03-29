@@ -1,6 +1,6 @@
 ---
 title: "Installation"
-description: "How to install the skillpm CLI on macOS, Linux, and Windows."
+description: "How to install the skilldex-cli on macOS, Linux, and Windows."
 section: "Getting Started"
 order: 2
 ---
@@ -11,36 +11,34 @@ Install the `skillpm` CLI using your preferred method.
 
 ## npm (recommended)
 
-Requires Node.js 18 or later.
+Works on macOS, Linux, and Windows. Requires Node.js 20 or later.
 
 ```bash
-npm install -g skillpm
+npm install -g skilldex-cli
 ```
 
 ## Homebrew (macOS/Linux)
 
 ```bash
-brew install skilldex
+brew tap pandemonium-research/skilldex
+brew install skilldex-cli
 ```
 
 ## curl (macOS/Linux)
 
-The install script detects your OS and architecture automatically.
+Requires Node.js 20+. The script checks your environment and installs via npm.
 
 ```bash
-curl -fsSL https://skilldex.dev/install.sh | sh
-```
-
-## winget (Windows)
-
-```bash
-winget install skilldex
+curl -fsSL https://skilldex-web.vercel.app/install.sh | sh
 ```
 
 ## Scoop (Windows)
 
+Requires Node.js 20+ and [Scoop](https://scoop.sh).
+
 ```bash
-scoop install skilldex
+scoop bucket add skilldex https://github.com/Pandemonium-Research/scoop-skilldex
+scoop install skilldex-cli
 ```
 
 ## Verify the install
@@ -51,7 +49,7 @@ After installing, confirm the CLI is working:
 skillpm --version
 ```
 
-You should see the version number printed to stdout, for example `skillpm 1.0.0`.
+You should see the version number printed to stdout, for example `0.1.0`.
 
 ## Troubleshooting
 
