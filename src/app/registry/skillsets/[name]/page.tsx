@@ -39,7 +39,7 @@ export default async function SkillsetPage({ params }: Props) {
     <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <Link
-          href="/registry?tab=skillsets"
+          href="/registry/skillsets"
           className="text-xs font-mono text-text-muted hover:text-text-primary transition-colors mb-4 inline-block"
         >
           ← Registry
@@ -154,7 +154,7 @@ export default async function SkillsetPage({ params }: Props) {
             {skillset.tags.map((tag) => (
               <Link
                 key={tag}
-                href={`/registry?tab=skillsets&q=${encodeURIComponent(tag)}`}
+                href={`/registry/skillsets?q=${encodeURIComponent(tag)}`}
                 className="text-xs font-mono px-2.5 py-1 bg-surface-raised border border-surface-border rounded hover:border-term-green transition-colors text-text-secondary"
               >
                 {tag}
