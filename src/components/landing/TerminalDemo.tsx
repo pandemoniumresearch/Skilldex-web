@@ -13,13 +13,15 @@ const lines = [
   { type: 'comment', text: '# Claude Code now has access to /forensics-analyze' },
 ]
 
+// Monochrome terminal palette: white for prompts, light gray for output,
+// mid gray for dim/comments — only one blue accent for the cursor
 const cx: Record<string, string> = {
-  prompt:  'text-term-cyan',
+  prompt:  'text-text-primary',
   dim:     'text-text-muted',
-  success: 'text-term-green',
+  success: 'text-text-secondary',
   out:     'text-text-secondary',
   blank:   '',
-  comment: 'text-term-comment',
+  comment: 'text-text-muted',
 }
 
 export function TerminalDemo() {
@@ -27,6 +29,7 @@ export function TerminalDemo() {
     <section className="py-16 border-t border-surface-border">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-lg border border-surface-border overflow-hidden">
+          {/* Window chrome — plain dots, no traffic-light colors */}
           <div className="flex items-center gap-1.5 px-4 py-2.5 bg-surface-raised border-b border-surface-border">
             <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" aria-hidden="true" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" aria-hidden="true" />
@@ -38,8 +41,8 @@ export function TerminalDemo() {
                 {line.text || '\u00A0'}
               </div>
             ))}
-            <span className="text-term-cyan">$ </span>
-            <span className="inline-block w-1.5 h-4 bg-term-cyan/70 align-middle" aria-hidden="true" />
+            <span className="text-text-secondary">$ </span>
+            <span className="inline-block w-1.5 h-4 bg-brand/70 align-middle" aria-hidden="true" />
           </div>
         </div>
       </div>
