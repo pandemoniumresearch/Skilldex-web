@@ -23,7 +23,7 @@ export function Navbar() {
               Install
             </Link>
             <a
-              href="https://github.com/anthropics/skilldex"
+              href="https://github.com/Pandemonium-Research/Skilldex"
               target="_blank"
               rel="noopener noreferrer"
               className="text-text-muted hover:text-text-secondary transition-colors"
