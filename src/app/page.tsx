@@ -4,7 +4,7 @@ import { ProblemSection } from '@/components/landing/ProblemSection'
 import { HowItWorks } from '@/components/landing/HowItWorks'
 import { TerminalDemo } from '@/components/landing/TerminalDemo'
 import { RegistryPreview } from '@/components/landing/RegistryPreview'
-import { InstallStrip } from '@/components/landing/InstallStrip'
+
 
 export const metadata: Metadata = {
   title: 'Skilldex — The skill package manager for AI agents',
@@ -20,7 +20,7 @@ export default function HomePage() {
       <HowItWorks />
       <TerminalDemo />
       <RegistryPreview />
-      <InstallStrip />
+
     </>
   )
 }

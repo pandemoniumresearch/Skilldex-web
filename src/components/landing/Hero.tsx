@@ -1,5 +1,29 @@
 import Link from 'next/link'
 import { CodeBlock } from '@/components/ui/CodeBlock'
+import { TabSwitcher } from '@/components/ui/TabSwitcher'
+
+const installTabs = [
+  {
+    id: 'npm',
+    label: 'npm',
+    content: <CodeBlock code="npm install -g skilldex-cli" language="bash" />,
+  },
+  {
+    id: 'brew',
+    label: 'Homebrew',
+    content: <CodeBlock code={"brew tap pandemonium-research/skilldex\nbrew install skilldex-cli"} language="bash" />,
+  },
+  {
+    id: 'curl',
+    label: 'curl',
+    content: <CodeBlock code="curl -fsSL https://skilldex-web.vercel.app/install.sh | sh" language="bash" />,
+  },
+  {
+    id: 'scoop',
+    label: 'Scoop',
+    content: <CodeBlock code={"scoop bucket add skilldex https://github.com/Pandemonium-Research/scoop-skilldex\nscoop install skilldex-cli"} language="bash" />,
+  },
+]
 
 export function Hero() {
   return (
@@ -18,27 +42,27 @@ export function Hero() {
           One command. Any project.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
-          <div className="w-full sm:w-80">
-            <CodeBlock code="npm install -g skilldex-cli" language="bash" />
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/docs/getting-started"
-              className="text-sm font-medium text-text-primary hover:text-brand transition-colors underline underline-offset-4 decoration-surface-border hover:decoration-brand"
-            >
-              Get started →
-            </Link>
-            <Link
-              href="/registry"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-            >
-              Browse registry
-            </Link>
-          </div>
+        {/* Install tabs */}
+        <div className="w-full sm:w-[480px] mb-10">
+          <TabSwitcher tabs={installTabs} defaultTab="npm" />
         </div>
 
-        <div className="flex items-center gap-6 text-xs text-text-muted font-mono">
+        <div className="flex items-center gap-6">
+          <Link
+            href="/docs/getting-started"
+            className="text-sm font-medium text-text-primary hover:text-brand transition-colors underline underline-offset-4 decoration-surface-border hover:decoration-brand"
+          >
+            Get started →
+          </Link>
+          <Link
+            href="/registry"
+            className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+          >
+            Browse registry
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-6 text-xs text-text-muted font-mono mt-10">
           <span>Open source</span>
           <span className="text-surface-border">·</span>
           <span>MIT license</span>
