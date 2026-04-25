@@ -92,7 +92,7 @@ export default async function RegistryPage({ searchParams }: Props) {
             href={tabHref(t)}
             className={`text-xs font-mono px-4 py-1.5 rounded-md transition-all capitalize ${
               tab === t
-                ? 'bg-surface-overlay text-text-primary border border-surface-border'
+                ? 'bg-surface-overlay text-text-primary border border-brand/20'
                 : 'text-text-muted hover:text-text-secondary'
             }`}
           >
@@ -178,7 +178,7 @@ export default async function RegistryPage({ searchParams }: Props) {
                       href={buildHref(searchParams, { offset: String((p - 1) * limit) })}
                       className={`text-xs font-mono w-8 h-8 flex items-center justify-center rounded-lg border transition-colors ${
                         p === currentPage
-                          ? 'bg-surface-overlay text-text-primary border-surface-border'
+                          ? 'bg-surface-overlay text-text-primary border-brand/20'
                           : 'border-transparent text-text-muted hover:text-text-primary hover:border-surface-border'
                       }`}
                     >

@@ -28,7 +28,7 @@ export function TabSwitcher({ tabs, defaultTab }: TabSwitcherProps) {
             className={clsx(
               'px-3 py-1 text-xs font-mono rounded transition-colors',
               tab.id === activeTab
-                ? 'bg-surface-overlay text-text-primary border border-surface-border'
+                ? 'bg-surface-overlay text-text-primary border border-brand/20'
                 : 'text-text-muted hover:text-text-secondary'
             )}
           >

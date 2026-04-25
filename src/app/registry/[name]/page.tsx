@@ -96,7 +96,7 @@ export default async function SkillPage({ params }: Props) {
               href={`https://github.com/${skill.author}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-mono text-term-green hover:underline"
+              className="text-sm font-mono text-brand hover:underline"
             >
               @{skill.author}
             </a>
@@ -118,7 +118,7 @@ export default async function SkillPage({ params }: Props) {
               <Link
                 key={tag}
                 href={`/registry?tier=&q=${encodeURIComponent(tag)}`}
-                className="text-xs font-mono px-2.5 py-1 bg-surface-raised border border-surface-border rounded hover:border-term-green transition-colors text-text-secondary"
+                className="text-xs font-mono px-2.5 py-1 bg-surface-raised border border-surface-border rounded hover:border-brand transition-colors text-text-secondary"
               >
                 {tag}
               </Link>
@@ -134,7 +134,7 @@ export default async function SkillPage({ params }: Props) {
           href={skill.source_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-mono text-term-green hover:underline break-all"
+          className="text-sm font-mono text-brand hover:underline break-all"
         >
           {skill.source_url}
         </a>
