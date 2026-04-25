@@ -10,6 +10,11 @@
 @layer base {
   body {
     @apply bg-surface-base text-text-primary;
+    letter-spacing: -0.012em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
   }
 
   /* MDX prose styles */
@@ -50,7 +55,7 @@
     @apply px-4 py-2.5 text-text-primary text-sm border border-surface-border;
   }
   .mdx-content code:not(pre code) {
-    @apply font-mono text-[13px] bg-surface-overlay text-term-cyan px-1.5 py-0.5 rounded;
+    @apply font-mono text-[13px] bg-surface-overlay text-brand px-1.5 py-0.5 rounded;
   }
   .mdx-content hr {
     @apply border-surface-border my-8;

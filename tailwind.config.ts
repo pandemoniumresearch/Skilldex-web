@@ -7,27 +7,27 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          base:    '#0d0f12',
-          raised:  '#13161b',
-          overlay: '#1a1e26',
-          border:  '#252a35',
+          base:    '#15140f',
+          raised:  '#1c1b16',
+          overlay: '#23211b',
+          border:  '#25231c',
         },
         text: {
-          primary:   '#e8eaf0',
-          secondary: '#8892a4',
-          muted:     '#505a6e',
+          primary:   '#f6f1e3',
+          secondary: '#a39d8b',
+          muted:     '#6a655a',
         },
         brand: {
-          DEFAULT: '#5b9cf6',
-          dim:     '#3b7de0',
-          glow:    '#1a4a8a',
+          DEFAULT: '#ff8a1f',
+          dim:     '#cc6e19',
+          glow:    '#ff8a1f',
         },
         term: {
-          green:   '#4ec994',
+          green:   '#7ee787',
           cyan:    '#56d1d1',
           yellow:  '#e5c07b',
           red:     '#e06c75',
-          comment: '#4a5568',
+          comment: '#6a655a',
         },
       },
       fontFamily: {
@@ -43,6 +43,8 @@ const config: Config = {
         '2xl': ['1.5rem',   { lineHeight: '1.4' }],
         '3xl': ['1.875rem', { lineHeight: '1.3' }],
         '4xl': ['2.25rem',  { lineHeight: '1.2' }],
+        '5xl': ['3rem',     { lineHeight: '1.1' }],
+        '6xl': ['3.75rem',  { lineHeight: '1.04' }],
       },
     },
   },
