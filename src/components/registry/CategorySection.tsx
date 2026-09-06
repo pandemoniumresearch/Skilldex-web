@@ -3,13 +3,13 @@ import { SkillCard } from '@/components/registry/SkillCard'
 import type { RegistrySkill } from '@/types/registry'
 
 /**
- * One curated strip on the registry landing page.
+ * One category strip on the registry landing page.
  *
  * Every strip is a fixed query with no user input, so each one is a stable URL that hits both
  * Next's Data Cache and the registry's CDN cache. That is the point: the landing page costs
- * essentially nothing to render no matter how large the corpus grows.
+ * essentially nothing to render no matter how large the registry grows.
  */
-export function CuratedSection({
+export function CategorySection({
   title,
   blurb,
   href,

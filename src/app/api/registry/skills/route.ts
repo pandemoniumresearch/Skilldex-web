@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     tier: p.get('tier') ?? undefined,
     sort: p.get('sort') ?? undefined,
     tags: p.get('tags') ?? undefined,
-    scope: p.get('scope') === 'all' ? 'all' : undefined,
+    source: (p.get('source') as SearchOptions['source']) ?? undefined,
     limit,
     offset,
   }

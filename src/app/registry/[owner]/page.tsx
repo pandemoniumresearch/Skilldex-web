@@ -44,7 +44,7 @@ export default async function OwnerOrBareNamePage({ params }: Props) {
   }
 
   if (resolved.status === 'ambiguous') {
-    const { skills } = await searchSkills({ q: params.owner, scope: 'all', limit: 20 })
+    const { skills } = await searchSkills({ q: params.owner, limit: 20 })
     const matches = skills.filter((s) => s.name === params.owner)
 
     return (
@@ -90,7 +90,6 @@ export default async function OwnerOrBareNamePage({ params }: Props) {
   // Not a skill name — try it as an owner.
   const { skills, total, total_relation } = await searchSkills({
     owner: params.owner,
-    scope: 'all',
     limit: 50,
     sort: 'score',
   })

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { SearchBar } from '@/components/registry/SearchBar'
 import { SkillResults } from '@/components/registry/SkillResults'
 import { SkillsetCard } from '@/components/registry/SkillsetCard'
-import { CuratedSection } from '@/components/registry/CuratedSection'
+import { CategorySection } from '@/components/registry/CategorySection'
 import { getStats, getTags, searchSkills, searchSkillsets } from '@/lib/registry'
 import { formatTotal } from '@/lib/format'
 import type { SearchOptions } from '@/types/registry'
@@ -13,7 +13,6 @@ type Props = {
     tier?: string
     sort?: string
     tags?: string
-    scope?: string
     limit?: string
     tab?: string
   }
@@ -34,7 +33,6 @@ function buildHref(searchParams: Props['searchParams'], updates: Partial<Props['
   if (merged.q) params.set('q', merged.q)
   if (merged.tier) params.set('tier', merged.tier)
   if (merged.tags) params.set('tags', merged.tags)
-  if (merged.scope === 'all') params.set('scope', 'all')
   // Absence of `sort` is the only representation of "default". The API resolves it
   // conditionally — relevance when `q` is present, installs otherwise — so 'installs' is no
   // longer *the* default and must survive in the URL when explicitly chosen.
@@ -46,12 +44,11 @@ function buildHref(searchParams: Props['searchParams'], updates: Partial<Props['
 export default async function RegistryPage({ searchParams }: Props) {
   const tab = searchParams.tab === 'skillsets' ? 'skillsets' : 'skills'
   const limit = Math.min(Math.max(Number(searchParams.limit) || PAGE_SIZE, 1), 100)
-  const scope: SearchOptions['scope'] = searchParams.scope === 'all' ? 'all' : 'curated'
 
-  // Anything that narrows the corpus puts the page into results mode. With none of it, there
+  // Anything that narrows the registry puts the page into results mode. With none of it there
   // is nothing meaningful to list — at corpus scale every ordering column is degenerate, so
   // "the first 24 skills" would be arbitrary rows out of 1.6M — so the landing state shows
-  // curated strips instead.
+  // category strips instead.
   const hasQuery = Boolean(
     searchParams.q || searchParams.tier || searchParams.tags || searchParams.sort
   )
@@ -68,20 +65,14 @@ export default async function RegistryPage({ searchParams }: Props) {
         <h1 className="text-2xl font-mono font-semibold text-text-primary mb-1">Registry</h1>
         {stats ? (
           <p className="text-sm text-text-secondary font-mono">
-            <span className="text-text-primary">
-              {stats.skills.curated.toLocaleString()}
-            </span>{' '}
-            curated
-            {stats.skills.imported > 0 && (
+            <span className="text-text-primary">{stats.skills.total.toLocaleString()}</span>{' '}
+            skills
+            {stats.owners > 0 && (
               <>
-                {' · '}
-                <span className="text-text-primary">
-                  {stats.skills.total.toLocaleString()}
-                </span>{' '}
-                indexed
+                {' from '}
+                <span className="text-text-primary">{stats.owners.toLocaleString()}</span> owners
               </>
             )}
-            {stats.owners > 0 && <> · {stats.owners.toLocaleString()} owners</>}
           </p>
         ) : (
           <p className="text-sm text-text-secondary">
@@ -120,9 +111,9 @@ export default async function RegistryPage({ searchParams }: Props) {
       {tab === 'skillsets' ? (
         <SkillsetsTab searchParams={searchParams} limit={limit} />
       ) : hasQuery ? (
-        <SkillsResults searchParams={searchParams} limit={limit} scope={scope} />
+        <SkillsResults searchParams={searchParams} limit={limit} />
       ) : (
-        <CuratedLanding scope={scope} searchParams={searchParams} />
+        <LandingSections searchParams={searchParams} />
       )}
     </div>
   )
@@ -131,25 +122,22 @@ export default async function RegistryPage({ searchParams }: Props) {
 /* --------------------------------------------------------------------------- */
 
 /**
- * Landing state: four curated strips.
+ * Landing state: category strips over the whole registry.
  *
- * All of them scope to the curated tier, because that is where every usable signal lives. In
- * the merged corpus all 7 verified skills, all 33 with installs, all 2,106 tagged skills and
- * the entire published_at spread sit in the ~4,863 curated rows; the 1.6M imported rows
- * contribute none of it. Scoped this way the strips are meaningful; unscoped they would be
- * arbitrary slices of a corpus tied at zero.
+ * Deliberately NOT scoped by provenance. Search spans everything, and so do these — a skill
+ * being verified or installed is what makes it interesting, not which repo happened to be on
+ * the watch list. They work unscoped because the signal sorts to the top on its own: the rows
+ * with installs, tags or a verified tier float up regardless of how many zero-signal rows sit
+ * behind them.
+ *
+ * "Recently added" is the one that degrades right after a corpus import, since the whole batch
+ * shares an import timestamp. It self-heals as the seeder adds genuinely newer rows.
  */
-async function CuratedLanding({
-  scope,
-  searchParams,
-}: {
-  scope: SearchOptions['scope']
-  searchParams: Props['searchParams']
-}) {
+async function LandingSections({ searchParams }: { searchParams: Props['searchParams'] }) {
   const [verified, installed, recent, tags] = await Promise.all([
-    searchSkills({ tier: 'verified', scope, limit: FEATURED }),
-    searchSkills({ sort: 'installs', scope, limit: FEATURED }),
-    searchSkills({ sort: 'recent', scope, limit: FEATURED }),
+    searchSkills({ tier: 'verified', limit: FEATURED }),
+    searchSkills({ sort: 'installs', limit: FEATURED }),
+    searchSkills({ sort: 'recent', limit: FEATURED }),
     getTags(),
   ])
 
@@ -157,23 +145,23 @@ async function CuratedLanding({
 
   return (
     <>
-      <CuratedSection
+      <CategorySection
         title="Official"
         blurb="Published by Anthropic"
         href={buildHref(searchParams, { tier: 'verified' })}
         skills={verified.skills}
       />
 
-      <CuratedSection
+      <CategorySection
         title="Most installed"
         blurb="What people actually use"
         href={buildHref(searchParams, { sort: 'installs' })}
         skills={installed.skills}
       />
 
-      <CuratedSection
+      <CategorySection
         title="Recently added"
-        blurb="Newest in the curated registry"
+        blurb="Newest in the registry"
         href={buildHref(searchParams, { sort: 'recent' })}
         skills={recent.skills}
       />
@@ -205,11 +193,9 @@ async function CuratedLanding({
 async function SkillsResults({
   searchParams,
   limit,
-  scope,
 }: {
   searchParams: Props['searchParams']
   limit: number
-  scope: SearchOptions['scope']
 }) {
   const query: SearchOptions = {
     q: searchParams.q,
@@ -219,7 +205,6 @@ async function SkillsResults({
     // API's resolveSort() and made every text search rank by install_count — which is 0 for
     // all but 33 rows — so bm25 relevance ordering was unreachable from the site.
     sort: searchParams.sort,
-    scope,
     limit,
     offset: 0,
   }
@@ -231,15 +216,12 @@ async function SkillsResults({
       <EmptyState
         noun="skill"
         searched={Boolean(searchParams.q || searchParams.tier || searchParams.tags)}
-        scope={scope}
-        allHref={buildHref(searchParams, { scope: 'all' })}
       />
     )
   }
 
   return (
     <>
-      <ScopeToggle searchParams={searchParams} scope={scope} />
       <SkillResults
         // Load-bearing. See the note in SkillResults — without it, rows accumulated under the
         // previous query survive a filter change and the new first page is discarded.
@@ -248,7 +230,6 @@ async function SkillsResults({
           tier: searchParams.tier,
           tags: searchParams.tags,
           sort: searchParams.sort,
-          scope,
           limit,
         })}
         initialSkills={result.skills}
@@ -260,38 +241,6 @@ async function SkillsResults({
         query={query}
       />
     </>
-  )
-}
-
-function ScopeToggle({
-  searchParams,
-  scope,
-}: {
-  searchParams: Props['searchParams']
-  scope: SearchOptions['scope']
-}) {
-  return (
-    <div className="flex items-center gap-1 mb-4">
-      <span className="text-xs font-mono text-text-muted mr-1">Search:</span>
-      {(
-        [
-          { key: 'curated', label: 'Curated' },
-          { key: 'all', label: 'All skills' },
-        ] as const
-      ).map(({ key, label }) => (
-        <Link
-          key={key}
-          href={buildHref(searchParams, { scope: key })}
-          className={`text-xs font-mono px-2.5 py-1 rounded border transition-colors ${
-            scope === key
-              ? 'bg-surface-overlay text-text-primary border-brand/20'
-              : 'border-transparent text-text-muted hover:text-text-secondary'
-          }`}
-        >
-          {label}
-        </Link>
-      ))}
-    </div>
   )
 }
 
@@ -329,17 +278,7 @@ async function SkillsetsTab({
   )
 }
 
-function EmptyState({
-  noun,
-  searched,
-  scope,
-  allHref,
-}: {
-  noun: string
-  searched: boolean
-  scope?: SearchOptions['scope']
-  allHref?: string
-}) {
+function EmptyState({ noun, searched }: { noun: string; searched: boolean }) {
   const publishCmd = noun === 'skillset' ? 'skillpm skillset publish' : 'skillpm publish'
 
   return (
@@ -363,23 +302,13 @@ function EmptyState({
         {searched ? `No ${noun}s match your search.` : `No ${noun}s published yet.`}
       </p>
 
-      {/* A curated-scope miss is usually not a real miss — the corpus is 300x larger. */}
-      {searched && scope === 'curated' && allHref ? (
-        <p className="text-xs text-text-muted font-mono">
-          Nothing in the curated registry.{' '}
-          <Link href={allHref} className="text-brand hover:underline">
-            Search all skills →
-          </Link>
-        </p>
-      ) : (
-        <p className="text-xs text-text-muted font-mono">
-          Be the first — run{' '}
-          <code className="text-text-secondary bg-surface-overlay px-1.5 py-0.5 rounded">
-            {publishCmd}
-          </code>{' '}
-          from your {noun} folder.
-        </p>
-      )}
+      <p className="text-xs text-text-muted font-mono">
+        Be the first — run{' '}
+        <code className="text-text-secondary bg-surface-overlay px-1.5 py-0.5 rounded">
+          {publishCmd}
+        </code>{' '}
+        from your {noun} folder.
+      </p>
     </div>
   )
 }

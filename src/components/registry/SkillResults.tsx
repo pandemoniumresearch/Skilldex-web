@@ -57,7 +57,7 @@ export function SkillResults({
       if (query.tier) params.set('tier', query.tier)
       if (query.sort) params.set('sort', query.sort)
       if (query.tags) params.set('tags', query.tags)
-      if (query.scope === 'all') params.set('scope', 'all')
+      if (query.source) params.set('source', query.source)
       params.set('limit', String(pageSize))
       params.set('offset', String(offset))
 

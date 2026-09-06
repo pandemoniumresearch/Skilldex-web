@@ -32,8 +32,7 @@ function buildQuery(options: SearchOptions): string {
   if (options.sort) params.set('sort', options.sort)
   if (options.tags) params.set('tags', options.tags)
   if (options.owner) params.set('owner', options.owner)
-  // Omitted when 'curated': that is the API default, and leaving it out keeps URLs clean.
-  if (options.scope === 'all') params.set('scope', 'all')
+  if (options.source) params.set('source', options.source)
   if (options.limit !== undefined) params.set('limit', String(options.limit))
   if (options.offset !== undefined) params.set('offset', String(options.offset))
   return params.toString()

@@ -43,11 +43,8 @@ export type SearchOptions = {
   sort?: string
   tags?: string
   owner?: string
-  /**
-   * "curated" (default) is what the seeder and publishers put in the registry; "all" adds the
-   * imported corpus. The API defaults to curated, so omitting this is safe.
-   */
-  scope?: 'curated' | 'all'
+  /** Provenance filter. Unset searches the whole registry, which is the default. */
+  source?: 'seeded' | 'imported' | 'published'
   limit?: number
   offset?: number
 }
