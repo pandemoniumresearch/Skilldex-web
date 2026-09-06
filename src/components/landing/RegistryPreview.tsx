@@ -59,7 +59,7 @@ export async function RegistryPreview() {
           </Link>
         </div>
         <div className="divide-y divide-surface-border border border-surface-border rounded-xl overflow-hidden bg-surface-raised shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]">
-          {skills.map((skill) => <SkillRow key={skill.name} skill={skill} />)}
+          {skills.map((skill) => <SkillRow key={skill.qualified_name} skill={skill} />)}
         </div>
       </div>
     </section>

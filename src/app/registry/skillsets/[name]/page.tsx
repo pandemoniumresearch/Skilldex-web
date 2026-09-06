@@ -36,7 +36,7 @@ export default async function SkillsetPage({ params }: Props) {
   })
 
   return (
-    <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <Link
           href="/registry/skillsets"
@@ -127,6 +127,9 @@ export default async function SkillsetPage({ params }: Props) {
             {skillset.skills.map((skill) => (
               <div key={skill.name} className="flex items-center justify-between px-4 py-3 bg-surface-raised">
                 <Link
+                  // Bare name: skill_refs carry no owner. /registry/{name} is the
+                  // resolver, which redirects when the name is unique and shows a
+                  // disambiguation list when it is not.
                   href={`/registry/${skill.name}`}
                   className="text-sm font-mono text-term-green hover:underline"
                 >
@@ -176,6 +179,6 @@ export default async function SkillsetPage({ params }: Props) {
           {skillset.source_url}
         </a>
       </div>
-    </main>
+    </div>
   )
 }

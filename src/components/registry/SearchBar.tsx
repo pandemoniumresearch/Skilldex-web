@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useRef } from 'react'
 
 const PER_PAGE_OPTIONS = [20, 50, 100]
@@ -15,6 +15,9 @@ type Props = {
 
 export function SearchBar({ defaultQ, defaultTier, defaultSort, defaultLimit, defaultTab }: Props) {
   const router = useRouter()
+  // Not a hardcoded '/registry': this component also renders on /registry/skillsets, where
+  // pushing to '/registry' navigated the user away from the page they were searching.
+  const pathname = usePathname()
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   function pushParams(updates: Record<string, string | undefined>) {
@@ -30,9 +33,10 @@ export function SearchBar({ defaultQ, defaultTier, defaultSort, defaultLimit, de
     if (merged.tab && merged.tab !== 'skills') params.set('tab', merged.tab)
     if (merged.q) params.set('q', merged.q)
     if (merged.tier) params.set('tier', merged.tier)
-    if (merged.sort && merged.sort !== 'installs') params.set('sort', merged.sort)
+    // See buildHref in app/registry/page.tsx — absence is the only "default" for sort.
+    if (merged.sort) params.set('sort', merged.sort)
     if (merged.limit && merged.limit !== '20') params.set('limit', merged.limit)
-    router.push(`/registry${params.size ? `?${params.toString()}` : ''}`)
+    router.push(`${pathname}${params.size ? `?${params.toString()}` : ''}`)
   }
 
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
@@ -77,10 +81,17 @@ export function SearchBar({ defaultQ, defaultTier, defaultSort, defaultLimit, de
         </select>
 
         <select
-          defaultValue={defaultSort ?? 'installs'}
+          // `key` forces a remount when the URL changes, so browser-back updates the control.
+          // Uncontrolled selects keep their DOM value otherwise.
+          key={`sort-${defaultSort ?? ''}-${defaultQ ?? ''}`}
+          // Mirror the API's conditional default so the control shows what will actually
+          // happen. Shown unconditionally: resolveSort() falls back to installs when
+          // relevance is requested without a query, so there is no broken state.
+          defaultValue={defaultSort ?? (defaultQ ? 'relevance' : 'installs')}
           onChange={(e) => pushParams({ sort: e.target.value })}
           className="bg-surface-raised border border-surface-border rounded-lg px-3 py-2.5 text-sm font-mono text-text-secondary focus:outline-none focus:border-brand/60 transition-colors cursor-pointer"
         >
+          <option value="relevance">Best match</option>
           <option value="installs">Most installed</option>
           <option value="score">Highest score</option>
           <option value="recent">Recently added</option>
